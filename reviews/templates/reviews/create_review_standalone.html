@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer une critique - LITReview{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Créer une critique</h2>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Section Livre/Article -->
+                    <h5 class="mb-3">Livre / Article</h5>
+                    
+                    <div class="mb-3">
+                        <label for="{{ ticket_form.title.id_for_label }}" class="form-label">Titre</label>
+                        {{ ticket_form.title }}
+                        {% if ticket_form.title.errors %}
+                        <div class="text-danger small mt-1">{{ ticket_form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ ticket_form.description.id_for_label }}" class="form-label">Description</label>
+                        {{ ticket_form.description }}
+                        {% if ticket_form.description.errors %}
+                        <div class="text-danger small mt-1">{{ ticket_form.description.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ ticket_form.image.id_for_label }}" class="form-label">Image</label>
+                        {{ ticket_form.image }}
+                        {% if ticket_form.image.errors %}
+                        <div class="text-danger small mt-1">{{ ticket_form.image.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Section Critique -->
+                    <h5 class="mb-3">Critique</h5>
+                    
+                    <div class="mb-3">
+                        <label for="{{ review_form.headline.id_for_label }}" class="form-label">Titre</label>
+                        {{ review_form.headline }}
+                        {% if review_form.headline.errors %}
+                        <div class="text-danger small mt-1">{{ review_form.headline.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Note</label>
+                        <div class="form-rating">
+                            {% for radio in review_form.rating %}
+                            <div class="form-check form-check-inline">
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if review_form.rating.errors %}
+                        <div class="text-danger small mt-1">{{ review_form.rating.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ review_form.body.id_for_label }}" class="form-label">Commentaire</label>
+                        {{ review_form.body }}
+                        {% if review_form.body.errors %}
+                        <div class="text-danger small mt-1">{{ review_form.body.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Envoyer
+                        </button>
+                        <a href="{% url 'feed' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

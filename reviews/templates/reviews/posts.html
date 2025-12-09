@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Vos posts - LITReview{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h2 class="mb-4 text-center">Vos posts</h2>
+        
+        {% if page_obj %}
+            {% for post in page_obj %}
+                {% if post.content_type == 'TICKET' %}
+                    {% with ticket=post show_actions=True %}
+                        {% include 'reviews/snippets/ticket_snippet.html' %}
+                    {% endwith %}
+                {% elif post.content_type == 'REVIEW' %}
+                    {% with review=post show_actions=True %}
+                        {% include 'reviews/snippets/review_snippet.html' %}
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Navigation des pages" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="bi bi-chevron-left"></i> Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            Suivant <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-journal-x display-1 text-muted"></i>
+                <p class="mt-3 text-muted">Vous n'avez pas encore publié de posts.</p>
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <a href="{% url 'create_ticket' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-plus-circle"></i> Créer un billet
+                    </a>
+                    <a href="{% url 'create_review_standalone' %}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square"></i> Créer une critique
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
